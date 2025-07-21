@@ -1,0 +1,48 @@
+AWSTempateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Serverless API using AWS SAM (API Gateway + lambda)
+
+Resources:
+  GetFunc:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/
+      Handler: handlers.get_handler.lambda_handler
+      Runtime: python3.12
+      Events:
+        Home:
+          Type: Api
+          Properties:
+            Method: get
+            Path: /home
+
+  PostFunc:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/
+      Handler: handlers.post_handler.lambda_handler
+      Runtime: python3.12
+      Events:
+        Health:
+          Type: Api
+          Properties:
+            Method: get
+            Path: /health
+
+  HomeFunc:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/
+      Handler: handlers.home_handler.lambda_handler
+      Runtime: python3.12
+      Events:
+        Root:
+          Type: Api
+          Properties:
+            Method: get
+            Path: /
+
+Outputs:
+  ApiUrl:
+    Description: Api Gateway endpoint URL
+    Value: !Sub https://${ServerlessRestAPI}.execute-api.${AWS::Region}.amazon.com/Prod/home
